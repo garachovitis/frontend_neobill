@@ -12,4 +12,5 @@ android/
 .idea/
 .vscode/
 
+expo-env.d.ts
 my-release-key.keystore
