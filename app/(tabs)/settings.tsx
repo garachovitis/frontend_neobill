@@ -51,10 +51,13 @@ const Settings = () => {
         onRequestClose={closeModal}
       >
         <View style={styles.modalContent}>
-          <NewAccount />
+          {/* 🔴 Κουμπί κλεισίματος επάνω δεξιά */}
           <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-            <Text style={styles.closeButtonText}>Κλείσιμο</Text>
+            <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
+          
+          {/* Περιεχόμενο του modal */}
+          <NewAccount />
         </View>
       </Modal>
     </View>
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   groupContainer: {
+    
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
@@ -105,25 +109,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     elevation: 10,
+    position: 'relative', // Βοηθάει στο σωστό positioning του κουμπιού
   },
   closeButton: {
-    display: 'flex',
-    height: 45,
-    width: '70%', 
-    padding: 10,
-    backgroundColor: 'red', 
-    borderRadius: 25,
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'red',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
-    marginTop: 10,
-    
+    zIndex: 10, // Εξασφαλίζει ότι είναι πάνω από το υπόλοιπο περιεχόμενο
   },
   closeButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    borderRadius: 18,
   },
 });
 

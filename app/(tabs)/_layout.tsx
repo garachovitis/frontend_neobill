@@ -8,12 +8,12 @@ import HomeIcon from '@/assets/images/Home.png';
 import CalendarIcon from '@/assets/images/calend.png';
 import SettingsIcon from '@/assets/images/set.png';
 import CategoriesIcon from '@/assets/images/categ.png';
-import NewAccountIcon from '@/assets/images/plus.png';
 import logo from '@/assets/images/logo.png';
 import savedIcon from '@/assets/images/saved.png';
 import { Title } from 'react-native-paper';
 import App from './calendar';
 import Index from '@/app/(tabs)/index';
+import SavedBills from '@/app/saved';
 
 function TabBarIcon({ source, color }: { source: any; color?: string }) {
   return <Image source={source} style={{ width: 28, height: 28, tintColor: color }} />;
@@ -58,7 +58,7 @@ export default function TabLayout() {
         headerRight: () => (
           <Pressable
             onPress={() => {
-              router.push('./saved'); 
+              router.push('/saved'); 
             }}
             style={{ padding: 10, marginRight: 10 }}
           >

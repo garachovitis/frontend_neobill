@@ -80,7 +80,7 @@ const NewAccount: React.FC = () => {
       setResultMessage(null);
 
       const interval = setInterval(() => {
-        setProgress((prev) => (prev < 1 ? prev + 0.01 : 1)); 
+        setProgress((prev) => (prev < 1 ? prev + 0.005 : 1)); 
       }, 500);
   
       setTimeout(async () => {
@@ -242,7 +242,7 @@ const NewAccount: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20,  },
-  menu: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
+  menu: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, marginTop: 20 },
   serviceButton: { padding: 15, borderRadius: 25, alignItems: 'center', flex: 1, marginHorizontal: 5 },
   buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
   cosmoteButton: { backgroundColor: '#78be20' },
