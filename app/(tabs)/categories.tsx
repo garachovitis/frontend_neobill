@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { 
     View, Text, StyleSheet, TouchableOpacity, Alert, Modal, 
-    ScrollView, TextInput, RefreshControl, FlatList 
+    ScrollView, TextInput, RefreshControl, Image 
 } from 'react-native';
-import { getCategories, addCategory, getBillingInfo, deleteCategory } from '@/scripts/database';
+import { getCategories, addCategory, getBillingInfoByCategoryId, deleteCategory } from '@/scripts/database';
 
 interface Category {
     categoryid: number;
@@ -19,6 +19,22 @@ interface BillingData {
     data: string;
 }
 
+interface BillData {
+    paymentAmount?: number;
+    totalAmount?: number;
+    balance?: number;
+    dueDate?: string;
+    connection?: string;
+    address?: string;
+}
+
+const cleanAmount = (amount: number | string): number => {
+    if (typeof amount === 'string') {
+        amount = amount.replace(',', '.');
+    }
+    return parseFloat(amount.toString().replace(/[^0-9.-]+/g, "")) || 0;
+};
+
 const Categories = () => {
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -28,44 +44,53 @@ const Categories = () => {
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
     const [showCategoryModal, setShowCategoryModal] = useState<boolean>(false);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
     useEffect(() => {
         fetchCategories();
     }, []);
 
-    // ✅ Ανάκτηση κατηγοριών από την τοπική βάση SQLite
     const fetchCategories = async () => {
         try {
             const result = await getCategories() || [];
-            console.log('✅ Categories fetched from DB:', result);
-            setCategories(result); // Ενημέρωση της κατάστασης
+            console.log('Categories fetched from DB:', result);
+            setCategories(result);
         } catch (error) {
-            console.error('❌ Error fetching categories:', error);
-            setCategories([]); // Σε περίπτωση σφάλματος, κενό array
+            console.error('Error fetching categories:', error);
+            setCategories([]);
             Alert.alert('Σφάλμα', 'Αποτυχία ανάκτησης κατηγοριών.');
         }
     };
 
-    // ✅ Ανάκτηση πληροφοριών τιμολογίων από την τοπική βάση SQLite
+    const cosmoteLogo = require('@/assets/images/cosmote.png');
+    const deiLogo = require('@/assets/images/dei.png');
+    const deyapLogo = require('@/assets/images/eydap1.png');
+
     const fetchBillingInfo = async (categoryId: number) => {
         try {
-            const result = await getBillingInfo(categoryId.toString()) || [];
+            if (!categoryId) {
+                console.warn('No categoryId provided for fetching billing info.');
+                setBillingInfo([]);
+                return;
+            }
+            const result = await getBillingInfoByCategoryId(categoryId) || [];
             setBillingInfo(result as BillingData[]);
-            console.log('✅ Billing info fetched:', result);
+            console.log('Billing info fetched:', result);
         } catch (error) {
-            console.error('❌ Error fetching billing info:', error);
+            console.error('Error fetching billing info:', error);
             setBillingInfo([]);
         }
     };
+
     const handleShowCategories = (category: Category) => {
         setSelectedCategory(category);
         setShowCategoryModal(true);
     };
+
     const handleCategorySelection = (categoryId: number) => {
         console.log(`Κατηγορία επιλέχθηκε: ${categoryId}`);
-        setShowCategoryModal(false); // Κλείνει το modal μετά την επιλογή
+        setShowCategoryModal(false);
     };
 
-    // ✅ Ανανεώνει τις κατηγορίες (Pull to Refresh)
     const handleRefresh = async () => {
         setIsRefreshing(true);
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -73,41 +98,39 @@ const Categories = () => {
         setIsRefreshing(false);
     };
 
-    // ✅ Επιλογή κατηγορίας και άνοιγμα modal με τα τιμολόγια της κατηγορίας
     const handleCategoryPress = (category: Category) => {
         setSelectedCategory(category);
         fetchBillingInfo(category.categoryid);
         setShowCategoryModal(true);
     };
 
+    const validBillingInfo = billingInfo.filter(item => item && item.id);
+
     const handleDeleteCategory = async (categoryId: number) => {
         try {
             await deleteCategory(categoryId);
-            console.log(`✅ Κατηγορία διαγράφηκε: ${categoryId}`);
-            await fetchCategories(); // Επαναφόρτωση μετά τη διαγραφή
+            console.log(`Κατηγορία διαγράφηκε: ${categoryId}`);
+            await fetchCategories();
         } catch (error) {
-            console.error('❌ Σφάλμα κατά τη διαγραφή της κατηγορίας:', error);
+            console.error('Σφάλμα κατά τη διαγραφή της κατηγορίας:', error);
             Alert.alert('Σφάλμα', 'Δεν ήταν δυνατή η διαγραφή της κατηγορίας.');
         }
     };
 
-    // ✅ Προσθήκη κατηγορίας στην τοπική βάση
     const handleAddCategory = async () => {
         const { emoji, name } = newCategory;
         if (!emoji || !name) {
             Alert.alert('Παρακαλώ συμπληρώστε όλα τα πεδία.');
             return;
         }
-    
         try {
             await addCategory(emoji, name);
+            console.log('Κατηγορία προστέθηκε! Επαναφόρτωση...');
             setNewCategory({ emoji: '', name: '' });
+            await fetchCategories();
             setShowAddCategoryModal(false);
-            console.log('✅ Κατηγορία προστέθηκε! Επαναφόρτωση...');
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            await fetchCategories(); // Επαναφόρτωση μετά την προσθήκη
         } catch (error) {
-            console.error('❌ Error adding category:', error);
+            console.error('Error adding category:', error);
             Alert.alert('Σφάλμα', 'Αποτυχία προσθήκης κατηγορίας.');
         }
     };
@@ -120,7 +143,6 @@ const Categories = () => {
             >
                 {categories.map((category) => (
                     <View key={category.categoryid} style={styles.categoryBox}>
-                        {/* Εάν είμαστε σε edit mode, δείξε το X */}
                         {isEditMode && (
                             <TouchableOpacity 
                                 style={styles.deleteButton} 
@@ -129,8 +151,6 @@ const Categories = () => {
                                 <Text style={styles.deleteText}>X</Text>
                             </TouchableOpacity>
                         )}
-                        
-                        {/* Εάν δεν είμαστε σε edit mode, τότε μπορεί να γίνει επιλογή */}
                         <TouchableOpacity 
                             onPress={() => !isEditMode && handleCategoryPress(category)}
                             style={{ alignItems: 'center' }}
@@ -142,11 +162,11 @@ const Categories = () => {
                 ))}
             </ScrollView>
 
-            {/* Modal για προσθήκη νέας κατηγορίας */}
+
             <Modal visible={showAddCategoryModal} transparent={true} animationType="slide">
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Προσθήκη Νέας Κατηγορίας</Text>
+                        <Text style={styles.modalTitle}>Προσθήκη Κατηγορίας</Text>
                         <TextInput
                             style={styles.inputField}
                             placeholder="Emoji"
@@ -155,16 +175,16 @@ const Categories = () => {
                         />
                         <TextInput
                             style={styles.inputField}
-                            placeholder="Όνομα"
+                            placeholder="Όνομα κατηγορίας"
                             value={newCategory.name}
                             onChangeText={(text) => setNewCategory({ ...newCategory, name: text })}
                         />
                         <View style={styles.modalActions}>
-                            <TouchableOpacity onPress={handleAddCategory} style={styles.btnSave}>
-                                <Text style={styles.btnText}>Αποθήκευση</Text>
+                            <TouchableOpacity style={styles.btnCancel} onPress={() => setShowAddCategoryModal(false)}>
+                                <Text style={styles.btnText}>Άκυρο</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setShowAddCategoryModal(false)} style={styles.btnCancel}>
-                                <Text style={styles.btnText}>Ακύρωση</Text>
+                            <TouchableOpacity style={styles.btnSave} onPress={handleAddCategory}>
+                                <Text style={styles.btnText}>Αποθήκευση</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -183,34 +203,101 @@ const Categories = () => {
                 <Text style={styles.editModeText}>{isEditMode ? 'Τέλος' : 'Επεξεργασία'}</Text>
             </TouchableOpacity>
             <Modal visible={showCategoryModal} transparent={true} animationType="slide">
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                <Text style={styles.modalTitle}>
-                                    {selectedCategory ? selectedCategory.emoji + ' ' + selectedCategory.name : 'Κατηγορία'}
-                                </Text>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                                    const billData: BillData = bill.data ? JSON.parse(bill.data) : {};
+                        <Text style={styles.modalTitle}>
+                            {selectedCategory ? selectedCategory.name : 'Λογαριασμοί'}
+                        </Text>
 
-                                {/* Εμφάνιση τιμολογίων που ανήκουν σε αυτή την κατηγορία */}
-                                {billingInfo.length > 0 ? (
-                                    <FlatList
-                                        data={billingInfo}
-                                        keyExtractor={(item) => item.id.toString()}
-                                        renderItem={({ item }) => (
-                                            <View style={styles.billingItem}>
-                                                <Text style={styles.billingText}>Υπηρεσία: {item.service}</Text>
-                                                <Text style={styles.billingText}>Δεδομένα: {item.data}</Text>
+                        {/* Λίστα Λογαριασμών */}
+                        <ScrollView style={styles.billingList}>
+                            {billingInfo.length > 0 ? (
+                                billingInfo.map((bill) => {
+                                    const billData: { address?: string; connection?: string; paymentAmount?: number; totalAmount?: number; balance?: number; dueDate?: string } = bill.data ? JSON.parse(bill.data) : {};
+
+                                    // Logo ανάλογα με την υπηρεσία
+                                    const logo = {
+                                        cosmote: cosmoteLogo,
+                                        dei: deiLogo,
+                                        deyap: deyapLogo,
+                                    }[bill.service?.toLowerCase()] || null;
+
+                                    const connectionDetails =
+                                        bill.service.toLowerCase() === 'cosmote'
+                                            ? billData.connection || 'No Connection Info'
+                                            : bill.service.toLowerCase() === 'dei'
+                                            ? billData.address || 'No Address Info'
+                                            : bill.service.toLowerCase() === 'deyap'
+                                            ? billData.address || 'No Address Info'
+                                            : 'No Data';
+
+                                    const amount =
+                                        bill.service.toLowerCase() === 'cosmote' || bill.service.toLowerCase() === 'dei'
+                                            ? `${cleanAmount(billData.paymentAmount ?? billData.totalAmount ?? 0).toFixed(2)}€`
+                                            : `${cleanAmount(billData.balance ?? 0).toFixed(2)}€`;
+
+                                    const dueDate = billData.dueDate || 'N/A';
+
+                                    return (
+                                        <View key={bill.id} style={styles.billingCard}>
+                                            {/* Service Header */}
+                                            <Text style={styles.serviceTitle}>
+                                                {bill.service.toUpperCase()}
+                                            </Text>
+                                            
+                                            {/* Logo */}
+                                            {logo ? (
+                                                <Image source={logo} style={styles.accountLogo} />
+                                            ) : (
+                                                <Text>No Logo Available</Text>
+                                            )}
+                                            
+                                            {/* Connection Details */}
+                                            <Text style={styles.accountUsername}>
+                                                {connectionDetails}
+                                            </Text>
+
+                                            {/* Ποσό */}
+                                            <Text style={styles.accountAmount}>
+                                                Ποσό: {amount}
+                                            </Text>
+
+                                            {/* Λήξη */}
+                                            <Text style={styles.accountDueDate}>
+                                                Λήξη: {dueDate}
+                                            </Text>
+
+                                            {/* Κουμπιά */}
+                                            <View style={styles.accountButtons}>
+                                                <TouchableOpacity style={styles.btnPay}>
+                                                    <Text style={styles.btnText}>Pay</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.btnSchedule}>
+                                                    <Text style={styles.btnText}>Schedule</Text>
+                                                </TouchableOpacity>
                                             </View>
-                                        )}
-                                    />
-                                ) : (
-                                    <Text style={styles.noDataText}>Δεν υπάρχουν δεδομένα για αυτή την κατηγορία.</Text>
-                                )}
+                                        </View>
+                                    );
+                                })
+                            ) : (
+                                <Text style={styles.noBillingText}>
+                                    Δεν βρέθηκαν λογαριασμοί για αυτήν την κατηγορία.
+                                </Text>
+                            )}
+                        </ScrollView>
 
-                                <TouchableOpacity onPress={() => setShowCategoryModal(false)} style={styles.closeButton}>
-                                    <Text style={styles.closeButtonText}>Κλείσιμο</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </Modal>
+                        {/* Κουμπί Κλεισίματος */}
+                        <TouchableOpacity
+                            onPress={() => setShowCategoryModal(false)}
+                            style={styles.closeButton}
+                        >
+                            <Text style={styles.closeButtonText}>Κλείσιμο</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
                         </View>
                         );
                     };
@@ -257,6 +344,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '90%',
+        justifyContent: 'center',
         backgroundColor: '#fff',
         padding: 20,
         borderRadius: 15,
@@ -281,19 +369,23 @@ const styles = StyleSheet.create({
     },
     btnSave: {
         backgroundColor: '#37B7C3',
-        padding: 12,
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 5,
+        width: '48%',
+        height: 45,
         borderRadius: 20,
     },
     btnCancel: {
-        backgroundColor: '#D94C3D',
-        padding: 12,
+        backgroundColor: 'red',
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 5,
+        width: '48%',
+        height: 45,
         borderRadius: 20,
     },
-    btnText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 16,
-    },
+
     addCategoryButton: {
         position: 'absolute',
         bottom: 90, // Αυξάνουμε το bottom για να δημιουργήσουμε χώρο
@@ -348,10 +440,95 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
-    closeButton: {
+
+
+    billingItem: {
+        padding: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        backgroundColor: '#f9f9f9',
+        borderRadius: 8,
+        marginBottom: 10,
+    },
+    billingText: {
+        fontSize: 16,
+        color: '#333',
+    },
+    noDataText: {
+        fontSize: 16,
+        color: '#999',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    billingCard: {
+        width: '98%',
+        backgroundColor: '#ffffff',
+        borderRadius: 15,
+        padding: 20,
+        marginTop: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5,
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    serviceTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 10,
+    },
+    accountLogo: {
+        width: 50,
+        height: 50,
+        marginBottom: 10,
+    },
+    accountUsername: {
+        fontSize: 16,
+        color: '#555',
+        marginBottom: 10,
+    },
+    accountAmount: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 5,
+    },
+    accountDueDate: {
+        fontSize: 16,
+        color: '#666',
+        marginBottom: 15,
+    },
+    accountButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    btnPay: {
         backgroundColor: '#37B7C3',
+        padding: 12,
+        width: '48%',
+        borderRadius: 20,
+    },
+    btnSchedule: {
+        backgroundColor: '#071952',
+        padding: 12,
+        width: '48%',
+        borderRadius: 20,
+    },
+    btnText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    closeButton: {
+        backgroundColor: '#D94C3D',
         padding: 10,
-        borderRadius: 10,
+        width: '40%',
+        borderRadius: 19,
         alignSelf: 'center',
         marginTop: 10,
     },
@@ -359,6 +536,15 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontSize: 16,
+    },
+    noBillingText: {
+        fontSize: 16,
+        color: '#555',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    billingList: {
+        maxHeight: 400, // Καλύτερο height για να μην κόβεται το scroll
     },
 });
 

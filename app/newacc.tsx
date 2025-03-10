@@ -8,12 +8,13 @@ import * as SecureStore from 'expo-secure-store';
 import { addBillingInfo } from '@/scripts/database';
 import Categories from './(tabs)/categories';
 import { Keyboard } from 'react-native';
+import TermsModal from '@/app/terms&conditions';
 
-Keyboard.dismiss(); // ✅ Κλείσιμο πληκτρολογίου
+Keyboard.dismiss(); 
 
 
 
-Keyboard.dismiss(); // ✅ Κλείσιμο πληκτρολογίου
+Keyboard.dismiss(); 
 
 const NewAccount: React.FC = () => {
   const [currentForm, setCurrentForm] = useState<string | null>(null);
@@ -23,23 +24,24 @@ const NewAccount: React.FC = () => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0); // ✅ State για Progress Bar
+  const [progress, setProgress] = useState<number>(0); 
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   
 
-  // ✅ Load credentials when the component mounts
+
   useEffect(() => {
     loadCredentials();
   }, []);
 
-  // ✅ Update submit button state dynamically
+
   useEffect(() => {
     setIsSubmitDisabled(!(username && password && termsAccepted));
   }, [username, password, termsAccepted]);
 
   
 
-  // ✅ Load credentials securely from SecureStore
+
   const loadCredentials = async () => {
     try {
       const storedUsername = await SecureStore.getItemAsync('username');
@@ -61,20 +63,9 @@ const NewAccount: React.FC = () => {
     setResultMessage(null);
   };
 
-  const openTermsAndConditions = async () => {
-    const fileUri = FileSystem.documentDirectory + 'TermsAndConditions.pdf';
-    try {
-      const fileInfo = await FileSystem.getInfoAsync(fileUri);
-      if (!fileInfo.exists) {
-        await FileSystem.copyAsync({
-          from: require('@/app/(tabs)/TermsAndConditions.pdf'),
-          to: fileUri,
-        });
-      }
-      await Linking.openURL(fileUri);
-    } catch (error) {
-      Alert.alert('Error', 'Could not open Terms and Conditions.');
-    }
+  const openTermsAndConditions = () => {
+
+    setIsTermsModalOpen(true);
   };
 
   const submitForm = async () => {
@@ -89,7 +80,7 @@ const NewAccount: React.FC = () => {
       setResultMessage(null);
 
       const interval = setInterval(() => {
-        setProgress((prev) => (prev < 1 ? prev + 0.01 : 1)); // ✅ Προοδευτική αύξηση progress κάθε 500ms
+        setProgress((prev) => (prev < 1 ? prev + 0.01 : 1)); 
       }, 500);
   
       setTimeout(async () => {
@@ -101,22 +92,21 @@ const NewAccount: React.FC = () => {
           });
   
           if (response.data.status === 'success' && response.data.data) {
-            clearInterval(interval); // ✅ Σταματάμε την προοδευτική φόρτωση
-            setProgress(1); // ✅ Το progress φτάνει στο 100%
+            clearInterval(interval); 
+            setProgress(1); 
             try {
-              // ✅ Αποθήκευση στο SecureStore
+             
               await SecureStore.setItemAsync('username', username);
               await SecureStore.setItemAsync('password', password);
   
-              // ✅ Αποθήκευση των δεδομένων τοπικά στην SQLite
-              const billingData = JSON.stringify(response.data.data); // Μετατροπή σε string
+              const billingData = JSON.stringify(response.data.data); 
   
 
   
               await addBillingInfo(currentForm!, username, null, billingData);
   
               console.log(`✅ Δεδομένα που αποθηκεύτηκαν στη SQLite για: ${currentForm}`);
-              console.log(billingData); // 🧐 Εμφάνιση των δεδομένων
+              console.log(billingData); 
   
               setResultMessage(`Τα δεδομένα αποθηκεύτηκαν επιτυχώς για: ${currentForm}`);
               setUsername('');
@@ -130,8 +120,8 @@ const NewAccount: React.FC = () => {
             setResultMessage('Connection failed');
           }
         } catch (error) {
-          clearInterval(interval); // ✅ Σταμάτημα αν αποτύχει
-          setProgress(0); // ✅ Progress στο 0 σε περίπτωση error
+          clearInterval(interval); 
+          setProgress(0); 
           setResultMessage('Connection failed');
         } finally {
           setIsLoading(false);
@@ -143,23 +133,31 @@ const NewAccount: React.FC = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
-     {resultMessage && (
-          <View
+      {resultMessage && (
+        <View
+          style={[
+            styles.resultMessageContainer,
+            resultMessage.toLowerCase().includes('αποθηκεύτηκαν') || resultMessage.toLowerCase().includes('επιτυχώς')
+              ? styles.successMessage
+              : styles.errorMessage,
+          ]}
+        >
+          <Text
             style={[
-              styles.resultMessageContainer,
+              styles.resultMessageText,
               resultMessage.toLowerCase().includes('αποθηκεύτηκαν') || resultMessage.toLowerCase().includes('επιτυχώς')
-                ? styles.successMessage
-                : styles.errorMessage,
+                ? styles.successText
+                : styles.errorText,
             ]}
           >
-            <Text style={[styles.resultMessageText, resultMessage.toLowerCase().includes('αποθηκεύτηκαν') || resultMessage.toLowerCase().includes('επιτυχώς') ? styles.successText : styles.errorText]}>
-              {resultMessage}
-            </Text>
-          </View>
-        )}
-
+            {resultMessage}
+          </Text>
+        </View>
+      )}
+  
       <View style={styles.menu}>
         <TouchableOpacity
           style={[styles.serviceButton, styles.cosmoteButton]}
@@ -181,7 +179,7 @@ const NewAccount: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {currentForm && (
+        {currentForm && (
         <View style={styles.formContainer}>
           <Text style={styles.formTitle}>
             Login to {currentForm === 'cosmote' ? 'Cosmote' : currentForm === 'dei' ? 'ΔΕΗ' : 'ΔΕΥΑΠ'}
@@ -199,7 +197,7 @@ const NewAccount: React.FC = () => {
             value={password}
             onChangeText={setPassword}
           />
-
+  
           <View style={styles.checkboxContainer}>
             <TouchableOpacity
               onPress={() => setTermsAccepted(!termsAccepted)}
@@ -210,15 +208,16 @@ const NewAccount: React.FC = () => {
             <TouchableOpacity onPress={openTermsAndConditions}>
               <Text style={styles.termsText}>Αποδοχή όρων χρήσης</Text>
             </TouchableOpacity>
+
           </View>
-
+  
+          {/* Progress bar */}
           {isLoading ? (
-              <View>
-                <ProgressBar progress={progress} color="#37B7C3" style={styles.progressBar} />
-                <Text style={styles.progressText}>{Math.round(progress * 100)}%</Text>
-              </View>
-           ) : (
-
+            <View>
+              <ProgressBar progress={progress} color="#37B7C3" style={styles.progressBar} />
+              <Text style={styles.progressText}>{Math.round(progress * 100)}%</Text>
+            </View>
+          ) : (
             <TouchableOpacity
               style={[styles.submitButton, isSubmitDisabled && styles.disabledButton]}
               onPress={submitForm}
@@ -229,8 +228,16 @@ const NewAccount: React.FC = () => {
           )}
         </View>
       )}
+  
+      {isTermsModalOpen && (
+        <TermsModal 
+          isOpen={isTermsModalOpen} 
+          onClose={() => setIsTermsModalOpen(false)} 
+        />
+      )}
     </View>
   );
+
 };
 
 const styles = StyleSheet.create({

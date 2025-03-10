@@ -13,6 +13,7 @@ import logo from '@/assets/images/logo.png';
 import savedIcon from '@/assets/images/saved.png';
 import { Title } from 'react-native-paper';
 import App from './calendar';
+import Index from '@/app/(tabs)/index';
 
 function TabBarIcon({ source, color }: { source: any; color?: string }) {
   return <Image source={source} style={{ width: 28, height: 28, tintColor: color }} />;
@@ -42,15 +43,17 @@ export default function TabLayout() {
           backgroundColor: '#fff',
         },
         headerLeft: () => (
-          <Pressable
-            onPress={() => {}}
+            <Pressable
+            onPress={() => {
+              router.push(Index);
+            }}
             style={{ padding: 10, marginLeft: 10 }}
-          >
+            >
             <Image
               source={logo}
               style={{ width: 65, height: 65, resizeMode: 'contain' }}
             />
-          </Pressable>
+            </Pressable>
         ),
         headerRight: () => (
           <Pressable

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
-import NewAccount from '@/app/newacc'; // Το αρχικό σου component
+import NewAccount from '@/app/newacc'; 
 
 const Settings = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -15,7 +15,6 @@ const Settings = () => {
 
   return (
     <View style={styles.container}>
-      {/* Πρώτη ομάδα */}
       <Text style={styles.groupTitle}>Γενικά</Text>
       <View style={styles.groupContainer}>
         <TouchableOpacity style={styles.option} onPress={openModal}>
@@ -32,7 +31,6 @@ const Settings = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Δεύτερη ομάδα */}
       <Text style={styles.groupTitle}>Πληροφορίες</Text>
       <View style={styles.groupContainer}>
         <TouchableOpacity style={styles.option}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal, FlatList, RefreshControl } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import { getBillingInfo, getCategories, updateBillingInfo } from '@/scripts/database';
+import { getBillingInfo, getCategories, updateBillingInfo, updateBillingCategoryLocal } from '@/scripts/database';
 
 NetInfo.fetch().then(state => {
   console.log('Is connected?', state.isConnected);
@@ -225,36 +225,25 @@ const BillingInfoScreen: React.FC = () => {
         if (!selectedBill) return;
     
         try {
-            // ✅ Ενημέρωση του categoryid στο backend
-            const response = await fetch('https://backend-billy.onrender.com/update-billing-category', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ billingid: selectedBill.billingid, categoryid: categoryId }),
-            });
+            // ✅ Ενημέρωση του categoryid στην τοπική βάση
+            await updateBillingCategoryLocal(selectedBill.billingid, categoryId);
     
-            const result = await response.json();
+            // ✅ Ενημέρωση του UI ώστε να εμφανίζει τη νέα κατηγορία
+            setBillingInfo((prevBillingInfo) =>
+                prevBillingInfo.map((bill) =>
+                    bill.billingid === selectedBill.billingid ? { ...bill, categories: categoryId } : bill
+                )
+            );
     
-            if (result.status === 'success') {
-                // ✅ Ενημέρωση και στην τοπική SQLite βάση
-                await updateBillingCategoryLocal(selectedBill.billingid, categoryId);
-    
-                // ✅ Ενημέρωση του UI ώστε να εμφανίζει τη νέα κατηγορία
-                setBillingInfo((prevBillingInfo) =>
-                    prevBillingInfo.map((bill) =>
-                        bill.billingid === selectedBill.billingid ? { ...bill, categories: categoryId } : bill
-                    )
-                );
-    
-                Alert.alert('Category updated successfully!');
-                setShowCategoryModal(false);
-            } else {
-                Alert.alert('Failed to update category');
-            }
+            Alert.alert('Category updated successfully!');
+            setShowCategoryModal(false);
         } catch (error) {
-            console.error('Error updating category:', error);
+            console.error('❌ Error updating category:', error);
             Alert.alert('Error updating category');
         }
     };
+
+
 
     const handleComingSoon = () => {
         Alert.alert('Function coming 🔜 \nStay tuned 😄');
@@ -312,20 +301,19 @@ const BillingInfoScreen: React.FC = () => {
 
     const displayDEIData = (data: { accountNumber: string; address: string; totalAmount: string; dueDate: string }, bill: BillingData) => (
         <View style={styles.accountCard}>
-            {/* Επικεφαλίδα με τη διεύθυνση */}
+  
             <View style={styles.accountHeaderBox}>
                 <Text style={styles.accountName}>{formatAddress(data.address)}</Text>
             </View>
-            {/* Λογότυπο */}
+ 
             <Image source={deiLogo} style={styles.accountLogo} />
-            {/* Πληροφορίες χρέωσης */}
+
             <View style={styles.billingInfo}>
                 <Text style={styles.accountAmount}>{formatAmount(data.totalAmount)}</Text>
                 <Text style={styles.accountDueDate}>Λήξη: {data.dueDate || 'No data'}</Text>
             </View>
-            {/* Dropdown menu */}
+
             {displayDropdownMenu(bill)}
-            {/* Κουμπιά ενεργειών */}
             <View style={styles.accountButtons}>
                 <TouchableOpacity style={styles.btnPay} onPress={handleComingSoon}>
                     <Text style={styles.btnText}>Pay</Text>
@@ -449,7 +437,7 @@ const BillingInfoScreen: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        // backgroundColor: '#ffffff',
+    
     },
     progressSummaryWrapper: {
         backgroundColor: '#FFFFFF',

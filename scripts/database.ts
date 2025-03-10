@@ -211,7 +211,21 @@ export const getBillingInfo = async (service: string | null = null) => {
 };
 
 
+export const getBillingInfoByCategoryId = async (categoryId: number) => {
+  if (!db) return [];
 
+  try {
+      const query = `SELECT * FROM billing_info WHERE categories = ?;`;
+      const params = [categoryId];
+      const result = await db.getAllAsync(query, params);
+
+      console.log('🧐 Fetched billing info by categoryId:', JSON.stringify(result, null, 2));
+      return result.length > 0 ? result : [];
+  } catch (error) {
+      console.error('❌ Error fetching billing info by categoryId:', error);
+      return [];
+  }
+};
 
 export const addBillingInfo = async (service: string, username: string, categoryId: number | null, data: string) => {
   if (!db) return;
