@@ -8,15 +8,15 @@ NetInfo.fetch().then(state => {
 });
 
 interface BillingData {
-    id: number; // Added to use for category update
+    id: number;  
     service: string;
     data: string;
-    billingid: number; // Added to fix the error
+    billingid: number; 
 }
 interface Category {
     name: string;
     emoji: string;
-    categoryid: number; // Added to fix the error
+    categoryid: number; 
 }
 
 
@@ -35,12 +35,12 @@ interface DeiData {
 interface DeyapData {
     address: string;
     balance: string;
-    dueDate?: string; // Updated to replace 'status'
+    dueDate?: string; 
 }
 
 const cleanAmount = (amount: string): number => {
-    const cleanedAmount = amount.replace(/[^\d,.]/g, '').replace(/,+/g, '.'); // Καθαρισμός δεδομένων
-    return parseFloat(cleanedAmount) || 0; // Μετατροπή σε αριθμό ή επιστροφή 0
+    const cleanedAmount = amount.replace(/[^\d,.]/g, '').replace(/,+/g, '.'); 
+    return parseFloat(cleanedAmount) || 0; 
 };
 const cosmoteLogo = require('@/assets/images/cosmote.png');
 const deiLogo = require('@/assets/images/dei.png');
@@ -62,10 +62,9 @@ const BillingInfoScreen: React.FC = () => {
             const bills = await fetchBillingInfo(null);
             const categoriesData = await getCategories();
     
-            // Map για αποφυγή διπλότυπων καταχωρήσεων
             const uniqueBills = new Map();
             (bills as BillingData[]).forEach((bill) => {
-                const uniqueKey = `${bill.service}-${bill.billingid}-${bill.data}`; // Δημιουργούμε ένα μοναδικό κλειδί για κάθε εγγραφή
+                const uniqueKey = `${bill.service}-${bill.billingid}-${bill.data}`; 
                 if (!uniqueBills.has(uniqueKey)) {
                     uniqueBills.set(uniqueKey, bill);
                 }
@@ -92,7 +91,7 @@ const BillingInfoScreen: React.FC = () => {
 
 
     const calculateCurrentMonthExpenses = (data: BillingData[]) => {
-        const currentMonth = new Date().getMonth() + 1; // Ο μήνας κυμαίνεται από 1 έως 12
+        const currentMonth = new Date().getMonth() + 1; 
         let total = 0;
     
         data.forEach((item) => {
@@ -121,7 +120,6 @@ const BillingInfoScreen: React.FC = () => {
                     monthFromData = parseInt(dateMatch[2], 10); // Εξάγουμε τον μήνα
                 }
     
-                // Προσθέτουμε το ποσό μόνο αν είναι για τον τρέχοντα μήνα
                 if (monthFromData === currentMonth) {
                     total += amount;
                 }
@@ -147,7 +145,7 @@ const BillingInfoScreen: React.FC = () => {
 
     const groupBillsByMonth = () => {
         const billsByMonth: Record<number, Array<JSX.Element>> = {};
-        const seenBills = new Set(); // ✅ Αποθήκευση μοναδικών στοιχείων
+        const seenBills = new Set(); 
         
         billingInfo.forEach((item) => {
             let billDataArray;
@@ -171,10 +169,9 @@ const BillingInfoScreen: React.FC = () => {
                 const dateMatch = billData.dueDate?.match(/(\d{2})\/(\d{2})\/(\d{4})/);
                 let billMonth = dateMatch ? parseInt(dateMatch[2], 10) - 1 : new Date().getMonth();
     
-                // ✅ Μοναδικό κλειδί για κάθε εγγραφή (βάσει billingid και data)
                 const uniqueKey = `${item.service}-${item.billingid}-${billData.connection}-${billData.billNumber}`;
     
-                if (seenBills.has(uniqueKey)) return; // ✅ Αν υπάρχει ήδη, το αγνοούμε
+                if (seenBills.has(uniqueKey)) return; 
                 seenBills.add(uniqueKey);
     
                 if (!billsByMonth[billMonth]) {
