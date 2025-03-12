@@ -225,10 +225,10 @@ const BillingInfoScreen: React.FC = () => {
         if (!selectedBill) return;
     
         try {
-            // ✅ Ενημέρωση του categoryid στην τοπική βάση
+            //  Ενημέρωση του categoryid στην τοπική βάση
             await updateBillingCategoryLocal(selectedBill.billingid, categoryId);
     
-            // ✅ Ενημέρωση του UI ώστε να εμφανίζει τη νέα κατηγορία
+            // Ενημέρωση του UI ώστε να εμφανίζει τη νέα κατηγορία
             setBillingInfo((prevBillingInfo) =>
                 prevBillingInfo.map((bill) =>
                     bill.billingid === selectedBill.billingid ? { ...bill, categories: categoryId } : bill
