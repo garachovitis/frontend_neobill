@@ -41,12 +41,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "889c2d85-1f2e-414e-9f74-df0599da9994"
+        "projectId": "b97e1fbd-6a27-41e3-88d7-155a5115e35d"
       },
       "router": {
         "origin": false
       }
     },
-    "owner": "billypays"
+    "owner": "neobill"
   }
 }
