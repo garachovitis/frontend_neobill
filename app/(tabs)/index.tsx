@@ -42,7 +42,7 @@ const cleanAmount = (amount: string): number => {
     const cleanedAmount = amount.replace(/[^\d,.]/g, '').replace(/,+/g, '.'); 
     return parseFloat(cleanedAmount) || 0; 
 };
-const cosmoteLogo = require('@/assets/images/cosmote.png');
+const cosmoteLogo = require('@/assets/images/cosmote2.png');
 const deiLogo = require('@/assets/images/dei.png');
 const deyapLogo = require('@/assets/images/eydap1.png');
 

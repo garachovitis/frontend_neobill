@@ -61,7 +61,7 @@ const Categories = () => {
         }
     };
 
-    const cosmoteLogo = require('@/assets/images/cosmote.png');
+    const cosmoteLogo = require('@/assets/images/cosmote2.png');
     const deiLogo = require('@/assets/images/dei.png');
     const deyapLogo = require('@/assets/images/eydap1.png');
 
