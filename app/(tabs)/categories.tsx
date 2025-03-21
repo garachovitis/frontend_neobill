@@ -297,10 +297,9 @@ const Categories = () => {
                     </View>
                 </View>
             </Modal>
-
-                        </View>
-                        );
-                    };
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
