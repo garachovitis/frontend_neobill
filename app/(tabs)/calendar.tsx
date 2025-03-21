@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
-// Λήψη διαστάσεων οθόνης
 const { width } = Dimensions.get('window');
 
 export default function App() {
@@ -13,7 +12,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Calendar
-        // Αρχικές ρυθμίσεις του ημερολογίου
         onDayPress={onDayPress}
         // Προσαρμογή για κάποια επιλεγμένη ημερομηνία
         markedDates={{

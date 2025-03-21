@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, Pressable, Platform } from 'react-native';
 import { Tabs, router } from 'expo-router';
-import Colors from '@/constants/Colors.ts';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import HomeIcon from '@/assets/images/Home.png';
@@ -10,10 +9,7 @@ import SettingsIcon from '@/assets/images/set.png';
 import CategoriesIcon from '@/assets/images/categ.png';
 import logo from '@/assets/images/logo.png';
 import savedIcon from '@/assets/images/saved.png';
-import { Title } from 'react-native-paper';
-import App from './calendar';
 import Index from '@/app/(tabs)/index';
-import SavedBills from '@/app/saved';
 
 function TabBarIcon({ source, color }: { source: any; color?: string }) {
   return <Image source={source} style={{ width: 28, height: 28, tintColor: color }} />;

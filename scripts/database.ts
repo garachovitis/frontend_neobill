@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const fetchBillingDataFromBackend = async () => {
   try {
-    const response = await axios.get('https://backend-billy.onrender.com/billing-info');
+    const response = await axios.get('https://backend-billy.onrender.com/api/billing-info');
 
     if (response.data.status === 'success') {
       const billingData = response.data.data;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; // Εικονίδια βελάκια
+import { AntDesign } from '@expo/vector-icons';
 
 const months = [
   { name: 'Οκτώβριος 2024', companies: ['Cosmote', 'ΔΕΗ', 'ΔΕΥΑΠ'] },
@@ -21,7 +21,6 @@ const Saved: React.FC = () => {
       <Text style={styles.headerText}>Αποθηκευμένοι Λογαριασμοί</Text>
       {months.map((month) => (
         <View key={month.name} style={styles.monthContainer}>
-          {/* Header του Μήνα */}
           <TouchableOpacity style={styles.monthHeader} onPress={() => toggleMonth(month.name)}>
             <Text style={styles.monthText}>{month.name}</Text>
             <AntDesign
@@ -31,7 +30,6 @@ const Saved: React.FC = () => {
             />
           </TouchableOpacity>
 
-          {/* Εταιρείες (Drop-down Links) */}
           {openMonth === month.name && (
             <View style={styles.companyList}>
               {month.companies.map((company, index) => (

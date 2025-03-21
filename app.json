@@ -2,10 +2,11 @@
   "expo": {
     "name": "neobill",
     "slug": "neobill",
+    "owner": "neobill",
+    "scheme": "neobill",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -38,15 +39,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "eas": {
-        "projectId": "b97e1fbd-6a27-41e3-88d7-155a5115e35d"
-      },
-      "router": {
-        "origin": false
-      }
-    },
-    "owner": "neobill"
+    }
   }
 }

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system';
-import * as Linking from 'expo-linking';
 import axios from 'axios';
 import { ProgressBar } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import { addBillingInfo } from '@/scripts/database';
-import Categories from './(tabs)/categories';
 import { Keyboard } from 'react-native';
 import TermsModal from '@/app/terms&conditions';
 
