@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal, FlatList, RefreshControl } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { getBillingInfo, getCategories, updateBillingInfo, updateBillingCategoryLocal } from '@/scripts/database';
+import { useFocusEffect } from '@react-navigation/native';
 
 NetInfo.fetch().then(state => {
   console.log('Is connected?', state.isConnected);
@@ -54,17 +55,25 @@ const BillingInfoScreen: React.FC = () => {
     const [selectedBill, setSelectedBill] = useState<BillingData | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [refreshing, setRefreshing] = useState<boolean>(false);
+    const [refreshKey, setRefreshKey] = useState(0);
+
 
 
     const fetchData = useCallback(async () => {
+        let isActive = true; // Προσθήκη ελέγχου αν είναι ενεργή η οθόνη
+    
         try {
             setRefreshing(true);
+            console.log('🔎 Fetching billing info...');
+            
             const bills = await fetchBillingInfo(null);
             const categoriesData = await getCategories();
     
+            if (!isActive) return; // Αν η οθόνη χάσει focus, σταματάει το fetch
+    
             const uniqueBills = new Map();
             (bills as BillingData[]).forEach((bill) => {
-                const uniqueKey = `${bill.service}-${bill.billingid}-${bill.data}`; 
+                const uniqueKey = `${bill.service}-${bill.billingid}-${bill.data}`;
                 if (!uniqueBills.has(uniqueKey)) {
                     uniqueBills.set(uniqueKey, bill);
                 }
@@ -72,20 +81,30 @@ const BillingInfoScreen: React.FC = () => {
     
             setBillingInfo(Array.from(uniqueBills.values()) as BillingData[]);
             setCategories(categoriesData);
-    
             calculateCurrentMonthExpenses(Array.from(uniqueBills.values()) as BillingData[]);
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('❌ Error fetching data:', error);
             Alert.alert('Error', 'Failed to fetch billing info or categories.');
         } finally {
             setRefreshing(false);
         }
+    
+        return () => {
+            isActive = false; // Ακυρώνει το fetch αν χαθεί το focus
+        };
     }, []);
 
     useEffect(() => {
         fetchData();
         console.log('BillingInfoScreen mounted', billingInfo);
-    }, [fetchData]);
+    }, [fetchData, refreshKey]);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+            console.log('BillingInfoScreen focused', billingInfo);
+        }, [])
+    );
 
 
 
@@ -367,7 +386,7 @@ const BillingInfoScreen: React.FC = () => {
     ];
 
     const handleRefresh = () => {
-        fetchData();
+        setRefreshKey((prevKey) => prevKey + 1);
     };
 
     return (
