@@ -13,11 +13,11 @@ export default function App() {
     <View style={styles.container}>
       <Calendar
         onDayPress={onDayPress}
-        // Προσαρμογή για κάποια επιλεγμένη ημερομηνία
+
         markedDates={{
-          '2024-10-15': { selected: true, marked: true, selectedColor: '#37B7C3' },
+          '2025-04-01': { selected: true, marked: true, selectedColor: '#37B7C3' },
         }}
-        // Θέμα για το ημερολόγιο σύμφωνα με την χρωματική παλέτα
+
         theme={{
           selectedDayBackgroundColor: '#37B7C3',
           todayTextColor: '#3b8193',

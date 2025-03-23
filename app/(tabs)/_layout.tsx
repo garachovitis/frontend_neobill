@@ -1,20 +1,17 @@
 import React from 'react';
 import { Image, Pressable, Platform } from 'react-native';
 import { Tabs, router } from 'expo-router';
-const Colors = require('@/constants/Colors.ts');
-const { useColorScheme } = require('@/components/useColorScheme');
+import { NavigationContainer } from '@react-navigation/native';
+import {useColorScheme} from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+
+// Images must be imported through require()
 const HomeIcon = require('@/assets/images/Home.png');
 const CalendarIcon = require('@/assets/images/calend.png');
 const SettingsIcon = require('@/assets/images/set.png');
 const CategoriesIcon = require('@/assets/images/categ.png');
 const logo = require('@/assets/images/logo.png');
 const savedIcon = require('@/assets/images/saved.png');
-import { Title } from 'react-native-paper';
-import App from './calendar';
-const Index = require('@/app/(tabs)/index');
-const SavedBills = require('@/app/saved');
-import { NavigationContainer } from '@react-navigation/native';
 
 function TabBarIcon({ source, color }: { source: any; color?: string }) {
   return <Image source={source} style={{ width: 28, height: 28, tintColor: color }} />;

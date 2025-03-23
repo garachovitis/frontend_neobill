@@ -63,7 +63,7 @@ export const fetchBillingDataFromBackend = async () => {
 };
 
 
-export const checkIfBillingExistsByConnection = async (service: string, username: string, connection: string): Promise<boolean> => {
+const checkIfBillingExistsByConnection = async (service: string, username: string, connection: string): Promise<boolean> => {
   if (!db) return false;
 
   try {
