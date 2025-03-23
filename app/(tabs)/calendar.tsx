@@ -47,10 +47,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   calendar: {
-    width: width * 0.9, // Προσαρμογή στο 90% του πλάτους της οθόνης
-    borderRadius: 10,   // Προσθήκη γωνιών για πιο όμορφη εμφάνιση
-    elevation: 3,       // Σκίαση για καλύτερη οπτική (Android)
-    shadowColor: '#000', // Σκίαση (iOS)
+    width: width * 0.9, 
+    borderRadius: 10,   
+    elevation: 3,       
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
