@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
 import NewAccount from '@/app/newacc'; 
 
+
 const Settings = () => {
+  const xButton = require('@/assets/images/xButton.png');
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -51,12 +54,9 @@ const Settings = () => {
         onRequestClose={closeModal}
       >
         <View style={styles.modalContent}>
-          {/* 🔴 Κουμπί κλεισίματος επάνω δεξιά */}
-          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-            <Text style={styles.closeButtonText}>X</Text>
-          </TouchableOpacity>
-          
-          {/* Περιεχόμενο του modal */}
+            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+              <Image source={xButton} style={styles.closeButtonImage} />
+            </TouchableOpacity>
           <NewAccount />
         </View>
       </Modal>
@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   groupContainer: {
-    
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
@@ -97,8 +96,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
   },
   modalContent: {
     marginTop: 60,
@@ -109,24 +108,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     elevation: 10,
-    position: 'relative', // Βοηθάει στο σωστό positioning του κουμπιού
+    position: 'relative',
   },
   closeButton: {
     position: 'absolute',
-    top: 10,
+    top: 15,
     right: 10,
-    backgroundColor: 'red',
     width: 30,
     height: 30,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10, // Εξασφαλίζει ότι είναι πάνω από το υπόλοιπο περιεχόμενο
+    zIndex: 10,
   },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+
+  closeButtonImage: {
+    width: 30,
+    height: 30,
   },
 });
 

@@ -67,7 +67,7 @@ const NewAccount: React.FC = () => {
 
   const submitForm = async () => {
     if (!username || !password) {
-      Alert.alert('Error', 'Please enter username and password.');
+      Alert.alert('Error', 'Παρακαλώ εισάγετε username και password.');
       return;
     }
   
@@ -179,17 +179,17 @@ const NewAccount: React.FC = () => {
         {currentForm && (
         <View style={styles.formContainer}>
           <Text style={styles.formTitle}>
-            Login to {currentForm === 'cosmote' ? 'Cosmote' : currentForm === 'dei' ? 'ΔΕΗ' : 'ΔΕΥΑΠ'}
+            Σύνδεση σε: {currentForm === 'cosmote' ? 'Cosmote' : currentForm === 'dei' ? 'ΔΕΗ' : 'ΔΕΥΑΠ'}
           </Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter your username"
+            placeholder="Εισαγωγή username"
             value={username}
             onChangeText={setUsername}
           />
           <TextInput
             style={styles.input}
-            placeholder="Enter your password"
+            placeholder="Εισαγωγή password"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
