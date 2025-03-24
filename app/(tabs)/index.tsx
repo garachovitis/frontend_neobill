@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal, FlatList, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Alert, Modal, FlatList, RefreshControl } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { getBillingInfo, getCategories, updateBillingInfo, updateBillingCategoryLocal } from '@/scripts/database';
 import { useFocusEffect } from '@react-navigation/native';
+import styles from '@/app/styles/indexStyles';
+import CategorySelectionModal from '@/app/modals/categorySelectionModal'; 
 
 NetInfo.fetch().then(state => {
   console.log('Is connected?', state.isConnected);
@@ -21,17 +23,6 @@ interface Category {
 }
 
 
-interface CosmoteData {
-    connection: string;
-    totalAmount: string;
-    dueDate?: string;
-}
-
-interface DeiData {
-    address: string;
-    paymentAmount: string;
-    dueDate?: string;
-}
 
 interface DeyapData {
     address: string;
@@ -60,16 +51,15 @@ const BillingInfoScreen: React.FC = () => {
 
 
     const fetchData = useCallback(async () => {
-        let isActive = true; // Προσθήκη ελέγχου αν είναι ενεργή η οθόνη
+        let isActive = true; 
     
         try {
             setRefreshing(true);
-            console.log('🔎 Fetching billing info...');
             
             const bills = await fetchBillingInfo(null);
             const categoriesData = await getCategories();
     
-            if (!isActive) return; // Αν η οθόνη χάσει focus, σταματάει το fetch
+            if (!isActive) return; 
     
             const uniqueBills = new Map();
             (bills as BillingData[]).forEach((bill) => {
@@ -90,19 +80,17 @@ const BillingInfoScreen: React.FC = () => {
         }
     
         return () => {
-            isActive = false; // Ακυρώνει το fetch αν χαθεί το focus
+            isActive = false; 
         };
     }, []);
 
     useEffect(() => {
         fetchData();
-        console.log('BillingInfoScreen mounted', billingInfo);
     }, [fetchData, refreshKey]);
 
     useFocusEffect(
         useCallback(() => {
             fetchData();
-            console.log('BillingInfoScreen focused', billingInfo);
         }, [])
     );
 
@@ -123,20 +111,19 @@ const BillingInfoScreen: React.FC = () => {
             }
     
             if (!Array.isArray(billDataArray)) {
-                billDataArray = [billDataArray]; // Αν δεν είναι πίνακας, τυλίγουμε σε πίνακα
+                billDataArray = [billDataArray]; 
             }
     
             billDataArray.forEach((billData: any) => {
                 const amount = cleanAmount(billData.balance || billData.totalAmount || '0');
-                if (amount === 0) return; // Αγνοούμε μηδενικά ποσά
+                if (amount === 0) return; 
     
                 let dueDate = billData.dueDate?.toLowerCase().trim() || 'ο λογαριασμός έχει λήξει';
-                let monthFromData = currentMonth; // Default στον τρέχοντα μήνα
+                let monthFromData = currentMonth; 
     
-                // Ελέγχουμε αν το dueDate είναι έγκυρο (π.χ. "15/02/2024")
                 const dateMatch = dueDate.match(/(\d{2})\/(\d{2})\/(\d{4})/);
                 if (dateMatch) {
-                    monthFromData = parseInt(dateMatch[2], 10); // Εξάγουμε τον μήνα
+                    monthFromData = parseInt(dateMatch[2], 10); 
                 }
     
                 if (monthFromData === currentMonth) {
@@ -150,9 +137,8 @@ const BillingInfoScreen: React.FC = () => {
 
     const formatAmount = (amount: string): string => {
         const cleanedAmount = cleanAmount(amount);
-        return cleanedAmount.toFixed(2) + '€'; // Μορφοποίηση ποσού
+        return cleanedAmount.toFixed(2) + '€'; 
     };
-    const formatConnection = (connection: string | undefined) => connection || "No data";
     const formatAddress = (address: string | undefined) => address || "No data";
 
     const toggleMonth = (monthIndex: number) => {
@@ -176,7 +162,7 @@ const BillingInfoScreen: React.FC = () => {
             }
     
             if (!Array.isArray(billDataArray)) {
-                billDataArray = [billDataArray]; // Αν δεν είναι array, το μετατρέπουμε
+                billDataArray = [billDataArray]; 
             }
     
             billDataArray.forEach((billData: any) => {
@@ -216,10 +202,6 @@ const BillingInfoScreen: React.FC = () => {
     };
     
 
-    const getPreviousMonth = (monthIndex: number) => {
-        return monthIndex === 0 ? 11 : monthIndex - 1;
-    };
-
     const displayDropdownMenu = (bill: BillingData) => (
         <View style={styles.dropdownContainer}>
             <TouchableOpacity onPress={() => handleShowCategories(bill)}>
@@ -241,10 +223,8 @@ const BillingInfoScreen: React.FC = () => {
         if (!selectedBill) return;
     
         try {
-            //  Ενημέρωση του categoryid στην τοπική βάση
             await updateBillingCategoryLocal(selectedBill.billingid, categoryId);
     
-            // Ενημέρωση του UI ώστε να εμφανίζει τη νέα κατηγορία
             setBillingInfo((prevBillingInfo) =>
                 prevBillingInfo.map((bill) =>
                     bill.billingid === selectedBill.billingid ? { ...bill, categories: categoryId } : bill
@@ -277,17 +257,17 @@ const BillingInfoScreen: React.FC = () => {
         }
     
         if (!Array.isArray(parsedData)) {
-            parsedData = [parsedData]; // Αν είναι αντικείμενο, το βάζουμε σε array
+            parsedData = [parsedData]; 
         }
     
-        const seenBills = new Set(); // ✅ Δημιουργία τοπικού συνόλου για αποφυγή διπλότυπων
+        const seenBills = new Set(); 
     
         return parsedData.map((billData: any, index: number) => {
             if (!billData) return null;
     
             const uniqueKey = `${bill.billingid}-${billData.connection}-${billData.billNumber}`;
             
-            if (seenBills.has(uniqueKey)) return null; // Αποφυγή διπλότυπων
+            if (seenBills.has(uniqueKey)) return null; 
             seenBills.add(uniqueKey);
     
             return (
@@ -351,7 +331,7 @@ const BillingInfoScreen: React.FC = () => {
         }
     
         const dueDate = parsedData.dueDate?.toLowerCase().trim() || 'ο λογαριασμός έχει λήξει';
-        const isInvalidDueDate = !dueDate.match(/\d{2}\/\d{2}\/\d{4}/); // Ελέγχει αν είναι έγκυρο
+        const isInvalidDueDate = !dueDate.match(/\d{2}\/\d{2}\/\d{4}/); 
         const finalDueDate = isInvalidDueDate ? 'Ο λογαριασμός έχει λήξει' : dueDate;
         const dueDateStyle = finalDueDate === 'Ο λογαριασμός έχει λήξει' ? styles.overdueText : styles.accountDueDate;
     
@@ -409,7 +389,7 @@ const BillingInfoScreen: React.FC = () => {
 
             {Object.entries(billsByMonth).map(([monthIndex, bills]) => {
                 if (bills.length === 0) {
-                    return null; // Αν δεν υπάρχουν λογαριασμοί για τον μήνα, παραλείπουμε την κατηγορία
+                    return null; 
                 }
                 const month = parseInt(monthIndex);
                 const isExpanded = expandedMonths[month];
@@ -419,251 +399,29 @@ const BillingInfoScreen: React.FC = () => {
                             <Text style={styles.categoryHeader}>{monthNames[month]}</Text>
                             <Text style={styles.arrow}>{isExpanded ? '▲' : '▼'}</Text>
                         </TouchableOpacity>
-                        {isExpanded && <View style={styles.accountsContainer}>{bills}</View>}
+                        {isExpanded && (
+                            <View style={styles.accountsContainer}>
+                                {bills.map((bill, index) => (
+                                    <View key={bill.key || index}> 
+                                        {bill}
+                                    </View>
+                                ))}
+                            </View>
+                        )}
                     </View>
                 );
             })}
 
-            <Modal visible={showCategoryModal} transparent={true} animationType="slide">
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Επιλογή Κατηγορίας</Text>
-                        <FlatList
-                            data={categories}
-                            keyExtractor={(item) => item.categoryid.toString()}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    onPress={() => handleCategorySelection(item.categoryid)}
-                                    style={styles.categoryItem}
-                                >
-                                    <Text>{item.emoji} {item.name}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
-                        <TouchableOpacity onPress={() => setShowCategoryModal(false)} style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>Κλείσιμο</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
+            <CategorySelectionModal
+                visible={showCategoryModal}
+                categories={categories}
+                onSelectCategory={handleCategorySelection}
+                onClose={() => setShowCategoryModal(false)}
+            />
         </ScrollView>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 20,
-    
-    },
-    progressSummaryWrapper: {
-        backgroundColor: '#FFFFFF',
-        padding: 21,
-        borderTopLeftRadius: 7,
-        borderTopRightRadius: 7,
-        borderBottomRightRadius: 29,
-        borderBottomLeftRadius: 29,
-        marginBottom: 26,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 10,
-    },
-    summaryHeader: {
-        alignSelf: 'center',
-        fontSize: 22,
-        color: '#333',
-        fontWeight: 'bold',
-    },
-    progressBarWrapper: {
-        marginTop: 16,
-    },
-    progressLabel: {
-        alignItems: 'center',
-        fontSize: 18,
-        color: '#606060',
-    },
-    progressBar: {
-        backgroundColor: '#f0f0f0',
-        height: 20,
-        borderRadius: 10,
-        overflow: 'hidden',
-        position: 'relative',
-    },
-    progressBarFilled: {
-        backgroundColor: '#37B7C3',
-        height: '100%',
-        width: '75%',
-    },
-    progressBarLabel: {
-        position: 'absolute',
-        right: 10,
-        top: '10%',
-        transform: [{ translateY: -8 }],
-        fontSize: 14,
-        color: '#333',
-    },
-    categorySection: {
-        marginBottom: 20,
-        backgroundColor: '#f8f9fa',
-        borderRadius: 13,
-        padding: 10,
-        alignItems: 'center',
-        shadowOpacity: 0.1,
-    },
-    categoryHeaderContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        paddingHorizontal: 15,
-    },
-    categoryHeader: {
-        fontSize: 20,
-        color: '#333',
-        padding: 15,
-        borderRadius: 15,
-    },
-    arrow: {
-        fontSize: 20,
-        color: '#333',
-    },
-    accountsContainer: {
-        marginTop: 10,
-    },
-    accountCard: {
-        backgroundColor: '#f8f9fa',
-        padding: 20,
-        borderRadius: 15,
-        marginBottom: 10,
-        position: 'relative',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 3,
-    },
-    accountHeaderBox: {
-        position: 'absolute',
-        top: 10,
-        left: 10,
-        backgroundColor: '#fff',
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 15,
-        elevation: 2,
-        zIndex: 1,
-    },
-    accountLogo: {
-        marginTop: 25,
-        width: 70,
-        height: 70,
-        alignSelf: 'center',
-        marginVertical: 10,
-    },
-    billingInfo: {
-        alignItems: 'center',
-        marginBottom: 15,
-    },
-    accountAmount: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    accountDueDate: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginBottom: 10,
-    },
-    accountButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-    },
-    btnPay: {
-        backgroundColor: '#37B7C3',
-        padding: 12,
-        width: '48%',
-        borderRadius: 20,
-    },
-    btnSchedule: {
-        backgroundColor: '#071952',
-        padding: 12,
-        width: '48%',
-        borderRadius: 20,
-    },
-    btnText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-    accountName: {
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    dropdownContainer: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        zIndex: 2,
-    },
-    moreOptions: {
-        fontSize: 24,
-        color: '#333',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        width: '80%',
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 5,
-    },
-    modalTitle: {
-        fontSize: 20,
-        marginBottom: 15,
-        textAlign: 'center',
-    },
-    categoryItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    closeButton: {
-        backgroundColor: 'red',
-        padding: 10,
-        borderRadius: 10,
-        alignSelf: 'center',
-        marginTop: 10,
-    },
-    closeButtonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-    overdueText: {
-        fontSize: 16,
-        color: 'red', // Κόκκινο κείμενο για λογαριασμούς που έχουν λήξει
-        textAlign: 'center',
-        marginBottom: 10,
-        fontWeight: 'bold',
-    },
-    errorText: {
-        fontSize: 16,
-        color: 'red',
-        textAlign: 'center',
-        marginBottom: 10,
-    },
-});
+
 
 export default BillingInfoScreen;

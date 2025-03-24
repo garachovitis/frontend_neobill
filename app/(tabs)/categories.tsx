@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal, ScrollView, Tex
 import { getCategories, addCategory, getBillingInfoByCategoryId, deleteCategory } from '@/scripts/database';
 import styles from '@/app/styles/categoriesStyles';
 import AddCategoryModal from '@/app/modals/addCategoryModal';
-import CategoryModal from '@/app/modals/categorisedExpensesModal';
+import CategoryModal from '@/app/modals/categoryModal';
 
 interface Category {
     categoryid: number;

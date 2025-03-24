@@ -103,7 +103,7 @@ const NewAccount: React.FC = () => {
   
               await addBillingInfo(currentForm!, username, null, billingData);
   
-              console.log(`✅ Δεδομένα που αποθηκεύτηκαν στη SQLite για: ${currentForm}`);
+              // console.log(`✅ Δεδομένα που αποθηκεύτηκαν στη SQLite για: ${currentForm}`);
               console.log(billingData); 
   
               setResultMessage(`Τα δεδομένα αποθηκεύτηκαν επιτυχώς για: ${currentForm}`);
