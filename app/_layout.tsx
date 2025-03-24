@@ -5,9 +5,21 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-import { setupDatabase } from '@/scripts/database';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+import { setupDatabase } from '@/scripts/database';
+import { registerBackgroundTask } from '@/scripts/autoScrape';
+
+export const startApp = async () => {
+    console.log('🚀 Starting app...');
+  
+    await setupDatabase();
+    await registerBackgroundTask();
+  
+    console.log('✅ ✅ ✅App started!');
+  };
+  
+startApp();
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

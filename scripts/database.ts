@@ -1,5 +1,8 @@
 import { openDatabaseSync } from 'expo-sqlite';
 import * as SecureStore from 'expo-secure-store';
+import * as BackgroundFetch from 'expo-background-fetch';
+
+const BACKGROUND_TASK = 'refresh-billing-data';
 
 
 const checkIfBillingExistsByConnection = async (service: string, username: string, connection: string): Promise<boolean> => {
@@ -268,5 +271,21 @@ export const deleteAllData = async () => {
     console.log('✅ All credentials deleted from Expo SecureStore.');
   } catch (error) {
     console.error('❌ Error deleting all data:', error);
+  }
+};
+
+export const registerBackgroundTask = async () => {
+  const status = await BackgroundFetch.getStatusAsync();
+
+  if (status === BackgroundFetch.BackgroundFetchStatus.Available) {
+    await BackgroundFetch.registerTaskAsync(BACKGROUND_TASK, {
+      minimumInterval: 60, 
+      stopOnTerminate: false, 
+      startOnBoot: true, 
+    });
+
+    console.log('✅ Background task registered');
+  } else {
+    console.log('⚠️ Background fetch not available');
   }
 };

@@ -60,7 +60,7 @@ const Settings = () => {
           <Text style={styles.optionText}>Επικοινωνία</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.groupTitle}>Ρυθμίσεις</Text>
+      <Text style={styles.groupTitle}>Επαναφορά</Text>
       <View style={styles.groupContainer}>
           <TouchableOpacity style={styles.option} onPress={() => setDeleteModalVisible(true)}>
             <Image source={{ uri: 'image.png' }} style={styles.icon} />

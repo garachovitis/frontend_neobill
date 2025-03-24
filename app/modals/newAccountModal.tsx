@@ -97,6 +97,7 @@ const NewAccount: React.FC<Props> = ({isVisible, onRequestClose}) => {
              
               await SecureStore.setItemAsync('username', username);
               await SecureStore.setItemAsync('password', password);
+              await SecureStore.setItemAsync('service', currentForm!);
   
               const billingData = JSON.stringify(response.data.data); 
   

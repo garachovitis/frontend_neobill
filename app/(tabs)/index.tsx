@@ -6,6 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import styles from '@/app/styles/indexStyles';
 import CategorySelectionModal from '@/app/modals/categorySelectionModal'; 
 
+
 NetInfo.fetch().then(state => {
   console.log('Is connected?', state.isConnected);
 });
@@ -34,7 +35,7 @@ const cleanAmount = (amount: string): number => {
     const cleanedAmount = amount.replace(/[^\d,.]/g, '').replace(/,+/g, '.'); 
     return parseFloat(cleanedAmount) || 0; 
 };
-const cosmoteLogo = require('@/assets/images/cosmote2.png');
+const cosmoteLogo = require('@/assets/images/cosmote.png');
 const deiLogo = require('@/assets/images/dei.png');
 const deyapLogo = require('@/assets/images/eydap1.png');
 
