@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 
 interface TermsModalProps {
   isOpen: boolean;
@@ -7,6 +7,8 @@ interface TermsModalProps {
 }
 
 const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
+  const xButton = require('@/assets/images/xButton.png');
+
   if (!isOpen) return null;
 
 
@@ -17,15 +19,15 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
       visible={isOpen}
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>❌</Text>
+      <View style={localStyles.overlay}>
+        <View style={localStyles.modalContainer}>
+          <TouchableOpacity onPress={onClose} style={localStyles.closeButton}>
+          <Image source={xButton} style={localStyles.closeButtonImage} />
           </TouchableOpacity>
 
-          <ScrollView style={styles.content}>
-            <Text style={styles.title}>Όροι και Προϋποθέσεις</Text>
-            <Text style={styles.text}>
+          <ScrollView style={localStyles.content}>
+            <Text style={localStyles.title}>Όροι και Προϋποθέσεις</Text>
+            <Text style={localStyles.text}>
             <Text style={{ fontWeight: 'bold' }}>1. Εισαγωγή</Text>{'\n'}
               Η εφαρμογή neobill παρέχει στους χρήστες της τη δυνατότητα να παρακολουθούν λογαριασμούς κοινής ωφελείας (ΔΕΚΟ) τοπικά στις συσκευές τους. Η χρήση της εφαρμογής προϋποθέτει τη συναίνεση του χρήστη με τους παρόντες όρους.{'\n\n'}
 
@@ -49,14 +51,14 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
 
               <Text style={{ fontWeight: 'bold' }}>8. Ισχύουσα Νομοθεσία</Text>{'\n'}
               Η εφαρμογή neobill και οι διαδικασίες που ακολουθούνται συμμορφώνονται με τον Γενικό Κανονισμό για την Προστασία Δεδομένων (GDPR) (Κανονισμός (ΕΕ) 2016/679), ο οποίος διέπει την επεξεργασία και προστασία των προσωπικών δεδομένων στην Ευρωπαϊκή Ένωση. Σύμφωνα με αυτόν τον κανονισμό: {'\n\n'}
-                <Text style={styles.bullet}>• Οι χρήστες έχουν το δικαίωμα να διαχειρίζονται, να διαγράφουν και να ελέγχουν τα προσωπικά τους δεδομένα.</Text>{'\n'}
-                <Text style={styles.bullet}>• Η εφαρμογή εφαρμόζει την προστασία των δεδομένων εξ ορισμού και χρησιμοποιεί κρυπτογράφηση για την ασφάλεια των προσωπικών δεδομένων.</Text>{'\n'}
-                <Text style={styles.text}>
+                <Text style={localStyles.bullet}>• Οι χρήστες έχουν το δικαίωμα να διαχειρίζονται, να διαγράφουν και να ελέγχουν τα προσωπικά τους δεδομένα.</Text>{'\n'}
+                <Text style={localStyles.bullet}>• Η εφαρμογή εφαρμόζει την προστασία των δεδομένων εξ ορισμού και χρησιμοποιεί κρυπτογράφηση για την ασφάλεια των προσωπικών δεδομένων.</Text>{'\n'}
+                <Text style={localStyles.text}>
                 Επιπλέον, η εφαρμογή συμμορφώνεται με τις διατάξεις του Ελληνικού Νόμου 4624/2019, ο οποίος ενσωματώνει τον GDPR στην εθνική νομοθεσία και καθορίζει επιπλέον υποχρεώσεις για την επεξεργασία των προσωπικών δεδομένων στην Ελλάδα. Συγκεκριμένα:
               </Text>{'\n'}
-                <Text style={styles.bullet}>• Τα προσωπικά δεδομένα των χρηστών προστατεύονται, και η εφαρμογή εγγυάται ότι παραμένουν υπό τον πλήρη έλεγχο του χρήστη.</Text>{'\n\n'}
+                <Text style={localStyles.bullet}>• Τα προσωπικά δεδομένα των χρηστών προστατεύονται, και η εφαρμογή εγγυάται ότι παραμένουν υπό τον πλήρη έλεγχο του χρήστη.</Text>{'\n\n'}
             
-            <Text style={styles.text}>
+            <Text style={localStyles.text}>
                 Με τη χρήση της εφαρμογής neobill, οι χρήστες επιβεβαιώνουν την κατανόησή τους για τους παρόντες όρους και τη συμμόρφωση της εφαρμογής με τα σχετικά νομικά πλαίσια για την προστασία δεδομένων.
             </Text>{'\n\n'}
             
@@ -69,7 +71,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -93,10 +95,12 @@ const styles = StyleSheet.create({
     right: 10,
     zIndex: 10,
   },
-  closeButtonText: {
-    fontSize: 24,
-    color: '#555',
+  closeButtonImage: {
+    width: 35, 
+    height: 35,
+    resizeMode: 'contain',
   },
+
   content: {
     marginTop: 30,
     maxHeight: 400,

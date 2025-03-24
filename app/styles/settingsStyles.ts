@@ -48,18 +48,18 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 15,
-    right: 10,
-    width: 30,
-    height: 30,
+    top: 10,
+    right: 13,
+    width: 50,
+    height: 50 ,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
   },
   closeButtonImage: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
   },
 });
 

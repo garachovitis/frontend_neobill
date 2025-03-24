@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   menu: { 
     flexDirection: 'row', 
     justifyContent: 'space-between', 
-    marginBottom: 20, 
+    marginBottom: 15, 
     marginTop: 20 
   },
   serviceButton: { 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0072bc' 
   },
   formContainer: {
-    marginBottom: 20,
+    marginBottom: 15,
     padding: 20,
     backgroundColor: '#fff',
     borderRadius: 15,
