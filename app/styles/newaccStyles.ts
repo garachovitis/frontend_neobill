@@ -133,6 +133,12 @@ const styles = StyleSheet.create({
     height: 10, 
     borderRadius: 5 
   },
+  progressMessage: {
+    marginTop: 8,
+    fontSize: 16,
+    color: '#888', 
+    textAlign: 'center', 
+  },
 });
 
 export default styles;

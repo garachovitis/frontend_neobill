@@ -103,7 +103,6 @@ const NewAccount: React.FC = () => {
   
               await addBillingInfo(currentForm!, username, null, billingData);
   
-              // console.log(`✅ Δεδομένα που αποθηκεύτηκαν στη SQLite για: ${currentForm}`);
               console.log(billingData); 
   
               setResultMessage(`Τα δεδομένα αποθηκεύτηκαν επιτυχώς για: ${currentForm}`);
@@ -212,7 +211,8 @@ const NewAccount: React.FC = () => {
           {isLoading ? (
             <View>
               <ProgressBar progress={progress} color="#37B7C3" style={styles.progressBar} />
-              <Text style={styles.progressText}>{Math.round(progress * 100)}%</Text>
+              <Text style={styles.progressMessage}>Η διαδικασία απαιτεί λίγο χρόνο. Μπορείτε να αποχωρήσετε από τη σελίδα νέας σύνδεσης.
+              </Text>
             </View>
           ) : (
             <TouchableOpacity
@@ -222,6 +222,8 @@ const NewAccount: React.FC = () => {
             >
               <Text style={styles.submitButtonText}>Υποβολή</Text>
             </TouchableOpacity>
+            
+            
           )}
         </View>
       )}
