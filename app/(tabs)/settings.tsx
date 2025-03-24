@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
-import NewAccount from '@/app/newacc'; 
+import NewAccount from '@/app/modals/newAccountModal'; 
 import styles from '@/app/styles/settingsStyles';
 
 const Settings = () => {
