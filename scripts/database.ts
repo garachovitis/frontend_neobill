@@ -1,66 +1,4 @@
 import { openDatabaseSync } from 'expo-sqlite';
-import axios from 'axios';
-
-
-export const fetchBillingDataFromBackend = async () => {
-  try {
-    const response = await axios.get('https://backend-billy.onrender.com/billing-info');
-
-    if (response.data.status === 'success') {
-      const billingData = response.data.data;
-      console.log('✅ Fetched billing data from backend:', billingData);
-
-      for (const bill of billingData) {
-        let billDataArray;
-        try {
-          billDataArray = JSON.parse(bill.data);
-        } catch (error) {
-          console.error('❌ Error parsing bill data JSON:', bill.data);
-          continue; // Αν υπάρχει πρόβλημα στην ανάλυση, προχωράμε στην επόμενη εγγραφή
-        }
-
-        if (!Array.isArray(billDataArray)) {
-          billDataArray = [billDataArray];
-        }
-
-        console.log('🧐 Parsed billDataArray:', billDataArray);
-
-        for (const billData of billDataArray) {
-          // ✅ Καθαρισμός `dueDate`
-          if (bill.service === "cosmote" && billData.dueDate) {
-            billData.dueDate = billData.dueDate.replace(/^Ο λογαριασμός λήγει /i, "").trim();
-          }
-
-          // ✅ Ελέγχουμε αν υπάρχει ήδη εγγραφή για αυτό το `connection`
-          const exists = await checkIfBillingExistsByConnection(
-            bill.service,
-            bill.username,
-            billData.connection
-          );
-
-          if (!exists) {
-            // ✅ Αποθήκευση ως νέα ξεχωριστή εγγραφή (νέο billingid)
-            await addBillingInfo(
-              bill.service,
-              bill.username,
-              bill.categories,
-              JSON.stringify(billData) // Αποθηκεύουμε **μόνο το συγκεκριμένο connection**
-            );
-            console.log(`✅ Stored new billing info for: ${bill.username} - ${bill.service} - ${billData.connection}`);
-          } else {
-            console.log(`⚠️ Billing data already exists for: ${bill.username} - ${bill.service} - ${billData.connection}, skipping...`);
-          }
-        }
-      }
-
-      console.log('✅ All new billing info stored locally.');
-    } else {
-      console.warn('⚠️ No billing data found in backend.');
-    }
-  } catch (error) {
-    console.error('❌ Error fetching billing info from backend:', error);
-  }
-};
 
 
 const checkIfBillingExistsByConnection = async (service: string, username: string, connection: string): Promise<boolean> => {
@@ -96,7 +34,6 @@ export const logBillingInfo = async () => {
   }
 };
 
-// ✅ Άνοιγμα βάσης δεδομένων με έλεγχο σφαλμάτων
 const getDatabase = () => {
   try {
     const db = openDatabaseSync('billingApp.db');
@@ -114,7 +51,6 @@ if (!db) {
   console.error('❌ Database is null. Check expo-sqlite installation.');
 }
 
-// ✅ Δημιουργία πινάκων
 export const setupDatabase = () => {
     if (!db) return;
   
@@ -143,8 +79,6 @@ export const setupDatabase = () => {
   };
 
 
-
-// ✅ Ανάκτηση κατηγοριών
 export const getCategories = async (): Promise<Category[]> => {
     if (!db) {
       console.error('❌ Database is null. Cannot fetch categories.');
@@ -162,14 +96,13 @@ export const getCategories = async (): Promise<Category[]> => {
       }
   
       console.log('✅ Processed categories:', result);
-      return result; // Σωστή επιστροφή αποτελεσμάτων
+      return result; 
     } catch (error) {
       console.error('❌ Error fetching categories:', error);
       return [];
     }
   };
 
-// ✅ Προσθήκη κατηγορίας
 export const addCategory = async (emoji: string, name: string) => {
   if (!db) return;
 
@@ -201,7 +134,7 @@ export const getBillingInfo = async (service: string | null = null) => {
 
     const result = await db.getAllAsync(query, params);
     
-    console.log('🧐 Local DB Billing Info:', JSON.stringify(result, null, 2)); // ✅ Δες τι φέρνει από τη βάση
+    console.log('🧐 Local DB Billing Info:', JSON.stringify(result, null, 2)); 
     
     return result.length > 0 ? result : [];
   } catch (error) {
@@ -231,7 +164,6 @@ export const addBillingInfo = async (service: string, username: string, category
   if (!db) return;
 
   try {
-    // 🔹 Μετατροπή του JSON `data` σε array αν δεν είναι ήδη
     let billDataArray;
     try {
       billDataArray = JSON.parse(data);
@@ -241,20 +173,17 @@ export const addBillingInfo = async (service: string, username: string, category
     }
 
     if (!Array.isArray(billDataArray)) {
-      billDataArray = [billDataArray]; // Αν είναι object, το κάνουμε array
+      billDataArray = [billDataArray]; 
     }
 
     for (const billData of billDataArray) {
-      // ✅ Καθαρισμός `dueDate`
       if (billData.dueDate) {
         billData.dueDate = billData.dueDate.replace(/^Ο λογαριασμός λήγει /i, "").trim();
       }
 
-      // ✅ Ελέγχουμε αν υπάρχει ήδη εγγραφή για το `connection`
       const exists = await checkIfBillingExistsByConnection(service, username, billData.connection);
 
       if (!exists) {
-        // ✅ Χρησιμοποιούμε **inline SQL** αντί για `?`
         await db.execAsync(
           `INSERT INTO billing_info (service, username, categories, data) 
           VALUES ('${service}', '${username}', ${categoryId}, '${JSON.stringify(billData)}')`
