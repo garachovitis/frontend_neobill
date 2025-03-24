@@ -1,4 +1,5 @@
 import { openDatabaseSync } from 'expo-sqlite';
+import * as SecureStore from 'expo-secure-store';
 
 
 const checkIfBillingExistsByConnection = async (service: string, username: string, connection: string): Promise<boolean> => {
@@ -247,4 +248,25 @@ export const deleteCategory = async (categoryId: number) => {
     } catch (error) {
         console.error('❌ Error updating category in local DB:', error);
     }
+};
+
+export const deleteAllData = async () => {
+  if (!db) {
+    console.error('❌ Database is null. Cannot delete data.');
+    return;
+  }
+
+  try {
+    await db.execAsync(`DELETE FROM billing_info;`);
+    await db.execAsync(`DELETE FROM categories;`);
+
+    console.log('✅ All data deleted from local database.');
+
+    await SecureStore.deleteItemAsync('username');
+    await SecureStore.deleteItemAsync('password');
+
+    console.log('✅ All credentials deleted from Expo SecureStore.');
+  } catch (error) {
+    console.error('❌ Error deleting all data:', error);
+  }
 };

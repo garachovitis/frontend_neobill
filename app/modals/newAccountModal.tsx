@@ -10,11 +10,12 @@ import styles from '@/app/styles/newaccStyles';
 
 Keyboard.dismiss(); 
 
+type  Props = {
+  isVisible: boolean;
+  onRequestClose: () => void;
+};
 
-
-Keyboard.dismiss(); 
-
-const NewAccount: React.FC = () => {
+const NewAccount: React.FC<Props> = ({isVisible, onRequestClose}) => {
   const [currentForm, setCurrentForm] = useState<string | null>(null);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -130,6 +131,7 @@ const NewAccount: React.FC = () => {
       setIsLoading(false);
     }
   };
+  if (!isVisible) return null;
 
   return (
     <View style={styles.container}>
