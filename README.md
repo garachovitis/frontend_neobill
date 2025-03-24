@@ -32,7 +32,7 @@ app
 │   ├── categoryModal.tsx            ──► Modal that displays all data of each category on categories
 │   ├── categorySelectionModal.tsx   ──► Modal for selecting categories from index
 │   ├── newAccountModal.tsx          ──► Modal for adding a new account from settings
-│   ├── terms&conditionsModal.tsx    ──► Modal for terms and conditions in settings
+│   ├── terms&conditionsModal.tsx    ──► Modal for terms and conditions in settings called from newaccount
 │
 ├── styles
 │   ├── categoriesStyles.ts   ──► Styles for categories screen
@@ -42,8 +42,14 @@ app
 │   ├── settingsStyles.ts     ──► Styles for the settings screen
 │
 ├── _layout.tsx               ──► Main layout file
-├── saved.tsx                 ──► Saved items screen
+├── saved.tsx                 ──► Saved items screen 
 │
+
+
 ├── assets                    ──► Static assets (images, icons, etc.)
 ├── components                ──► Reusable components
-└── scripts/database.ts       ──► connection with local db
+
+
+├── scripts
+    ├── database.ts           ──► connects with locadb
+    ├── autoScrape.ts         ──► autoscrapes on background to backend
