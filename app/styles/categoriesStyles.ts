@@ -217,10 +217,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   closeButton: {
-    backgroundColor: '#D94C3D',
+    backgroundColor: 'red',
     padding: 10,
-    width: '40%',
-    borderRadius: 19,
+    width: '50%',
+    borderRadius: 20,
     alignSelf: 'center',
     marginTop: 10,
   },
