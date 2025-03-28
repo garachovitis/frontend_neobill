@@ -5,8 +5,8 @@ import { ProgressBar } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import { addBillingInfo } from '@/scripts/database';
 import { Keyboard } from 'react-native';
-import TermsModal from '@/app/modals/terms&conditionsModal';
-import styles from '@/app/styles/newaccStyles';
+import TermsModal from '@/app/(tabs)/(settings)/terms&conditionsModal';
+import styles from '@/app/(tabs)/(settings)/StylesNewacc';
 
 Keyboard.dismiss(); 
 

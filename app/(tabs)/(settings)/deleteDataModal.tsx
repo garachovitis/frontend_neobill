@@ -20,13 +20,13 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   const handleDelete = async () => {
     try {
       await deleteAllData(); 
-      console.log('✅ All data successfully deleted');
+      console.log('All data successfully deleted');
       
       onCancel(); 
     } catch (error) {
-      console.error('❌ Error while deleting data:', error);
+      console.error('Error while deleting data:', error);
     } finally {
-      console.log('➡️ Setting success modal state...');
+      console.log('Setting success modal state...');
       setTimeout(() => {
         setShowSuccessModal(true); 
       }, 100);

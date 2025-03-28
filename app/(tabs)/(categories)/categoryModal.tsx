@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
-import styles from '@/app/styles/categoriesStyles';
+import styles from '@/app/(tabs)/(categories)/StylesCategories';
 
 interface BillData {
     address?: string;

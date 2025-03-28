@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal, ScrollView, TextInput, RefreshControl, Image } from 'react-native';
 import { getCategories, addCategory, getBillingInfoByCategoryId, deleteCategory } from '@/scripts/database';
-import styles from '@/app/styles/categoriesStyles';
-import AddCategoryModal from '@/app/modals/addCategoryModal';
-import CategoryModal from '@/app/modals/categoryModal';
+import styles from '@/app/(tabs)/(categories)/StylesCategories';
+import AddCategoryModal from '@/app/(tabs)/(categories)/addCategoryModal';
+import CategoryModal from '@/app/(tabs)/(categories)/categoryModal';
 
 interface Category {
     categoryid: number;

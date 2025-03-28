@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, Alert } from 'react-native';
-import styles from '@/app/styles/categoriesStyles';
+import styles from '@/app/(tabs)/(categories)/StylesCategories';
 
 interface Props {
     visible: boolean;

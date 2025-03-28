@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, Button } from 'react-native';
-import NewAccount from '@/app/modals/newAccountModal'; 
-import styles from '@/app/styles/settingsStyles';
-import DeleteConfirmationModal from '@/app/modals/deleteDataModal';
+import NewAccount from '@/app/(tabs)/(settings)/newAccountModal'; 
+import styles from '@/app/(tabs)/(settings)/StylesSettings';
+import DeleteConfirmationModal from '@/app/(tabs)/(settings)/deleteDataModal';
 
 export default function SettingsScreen() {
   const xButton = require('@/assets/images/xButton.png');

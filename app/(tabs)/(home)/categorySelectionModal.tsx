@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import styles from '@/app/styles/indexStyles';
+import styles from '@/app/(tabs)/(home)/StylesIndex';
 
 interface Category {
     categoryid: number;

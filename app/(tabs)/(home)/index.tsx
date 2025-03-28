@@ -3,8 +3,8 @@ import { View, Text, Image, TouchableOpacity, ScrollView, Alert, Modal, FlatList
 import NetInfo from '@react-native-community/netinfo';
 import { getBillingInfo, getCategories, updateBillingInfo, updateBillingCategoryLocal } from '@/scripts/database';
 import { useFocusEffect } from '@react-navigation/native';
-import styles from '@/app/styles/indexStyles';
-import CategorySelectionModal from '@/app/modals/categorySelectionModal'; 
+import styles from '@/app/(tabs)/(home)/StylesIndex';
+import CategorySelectionModal from '@/app/(tabs)/(home)/categorySelectionModal'; 
 
 
 NetInfo.fetch().then(state => {
