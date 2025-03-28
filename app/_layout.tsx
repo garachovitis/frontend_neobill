@@ -50,13 +50,17 @@ export default function RootLayout() {
           headerBackTitle: 'Πίσω',
           headerTitleStyle: { fontSize: 20 }
         }} />
-        <Stack.Screen name="@/saved/saved" options={{
-          title: 'Εξοφλημένοι',
-          headerBackTitle: 'Πίσω',
-          headerStyle: { backgroundColor: '#3b8193' },
-          headerTintColor: '#fff',
-          headerTitleStyle: { fontSize: 20 }
-        }} />
+        <Stack.Screen
+          name="saved"
+          options={{
+            title: "Εξοφλημένοι",
+            headerShown: true,
+            headerBackTitle: "Πίσω",
+            headerStyle: { backgroundColor: '#3b8193' },
+            headerTintColor: '#fff',
+            headerTitleStyle: { fontSize: 20 },
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );
