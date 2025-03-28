@@ -73,21 +73,21 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="categories"
+          name="(categories)"
           options={{
             title: 'Κατηγορίες',
             tabBarIcon: ({ color }) => <TabBarIcon source={CategoriesIcon} color={color} />,
           }}
         />
         <Tabs.Screen
-          name="calendar"
+          name="(calendar)"
           options={{
             title: 'Ημερολόγιο',
             tabBarIcon: ({ color }) => <TabBarIcon source={CalendarIcon} color={color} />,
           }}
         />
         <Tabs.Screen
-          name="settings"
+          name="(settings)"
           options={{
             title: 'Ρυθμίσεις',
             tabBarIcon: ({ color }) => <TabBarIcon source={SettingsIcon} color={color} />,
