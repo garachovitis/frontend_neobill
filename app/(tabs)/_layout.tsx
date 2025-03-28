@@ -53,7 +53,7 @@ export default function TabLayout() {
           headerRight: () => (
             <Pressable
               onPress={() => {
-                router.push('/saved');
+                router.push('/saved/saved');
               }}
               style={{ padding: 10, marginRight: 10 }}
             >
