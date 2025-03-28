@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import styles from '@/app/styles/savedStyles';
+import styles from '@/app/saved/savedStyles';
 
 const months = [
   { name: 'Οκτώβριος 2024', companies: ['Cosmote', 'ΔΕΗ', 'ΔΕΥΑΠ'] },

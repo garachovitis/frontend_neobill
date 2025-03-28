@@ -10,12 +10,12 @@ import { setupDatabase } from '@/scripts/database';
 import { registerBackgroundTask } from '@/scripts/autoScrape';
 
 export const startApp = async () => {
-    console.log('🚀 Starting app...');
+    console.log('Starting app...');
   
     await setupDatabase();
     await registerBackgroundTask();
   
-    console.log('✅ ✅ ✅App started!');
+    console.log('App started!');
   };
   
 startApp();
@@ -50,7 +50,7 @@ export default function RootLayout() {
           headerBackTitle: 'Πίσω',
           headerTitleStyle: { fontSize: 20 }
         }} />
-        <Stack.Screen name="saved" options={{
+        <Stack.Screen name="@/saved/saved" options={{
           title: 'Εξοφλημένοι',
           headerBackTitle: 'Πίσω',
           headerStyle: { backgroundColor: '#3b8193' },
