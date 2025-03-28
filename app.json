@@ -3,19 +3,18 @@
     "name": "neobill",
     "slug": "neobill",
     "owner": "neobill",
-    "scheme": "neobill",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/logo2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.billytest"
+      "bundleIdentifier": "com.neobill"
     },
     "android": {
       "versionCode": 2,
@@ -23,7 +22,7 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.billytest",
+      "package": "com.neobill",
       "newArchEnabled": true
     },
     "web": {
