@@ -5,14 +5,14 @@ import { deleteItemAsync } from "expo-secure-store";
 const db = openDatabaseSync('neobill.db');
 console.log('✅ Database opened successfully');
 
-export const setupDatabase = async () => {
-      await db.execAsync(`CREATE TABLE IF NOT EXISTS categories (
+export const setupDatabase = () => {
+      db.execSync(`CREATE TABLE IF NOT EXISTS categories (
         categoryid INTEGER PRIMARY KEY AUTOINCREMENT, 
         name TEXT NOT NULL, 
         emoji TEXT NOT NULL);`
       );
   
-      await db.execAsync(`CREATE TABLE IF NOT EXISTS billing_info (
+      db.execSync(`CREATE TABLE IF NOT EXISTS billing_info (
         billingid INTEGER PRIMARY KEY AUTOINCREMENT, 
         service TEXT NOT NULL, 
         username TEXT NOT NULL, 

@@ -51,19 +51,3 @@ TaskManager.defineTask(BACKGROUND_TASK, async () => {
 
   return BackgroundFetch.BackgroundFetchResult.NewData;
 });
-
-export const registerBackgroundTask = async () => {
-  const status = await BackgroundFetch.getStatusAsync();
-
-  if (status === BackgroundFetch.BackgroundFetchStatus.Available) {
-    await BackgroundFetch.registerTaskAsync(BACKGROUND_TASK, {
-      minimumInterval: 5 * 60, 
-      stopOnTerminate: false, 
-      startOnBoot: true, 
-    });
-
-    console.log('✅ Background task registered');
-  } else {
-    console.log('⚠️ Background fetch not available');
-  }
-};
