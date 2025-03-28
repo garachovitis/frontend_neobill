@@ -28,13 +28,13 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      SplashScreen.hideAsync().then();
     }
   }, [loaded]);
 
   useEffect(() => {
     console.log('🚀 Database setup');
-    setupDatabase();
+    setupDatabase().then();
   }, []);
 
   if (!loaded) {
