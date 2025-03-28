@@ -22,10 +22,10 @@
 app
 ├── (tabs)
 │   ├── _layout.tsx          ──► Layout for tab navigation
-│   ├── calendar.tsx         ──► Calendar screen
-│   ├── categories.tsx       ──► Categories screen
+│   ├── index.tsx         ──► Calendar screen
+│   ├── index.tsx       ──► Index screen
 │   ├── index.tsx            ──► Main screen
-│   ├── settings.tsx         ──► Settings screen
+│   ├── index.tsx         ──► Index screen
 │
 ├── modals
 │   ├── addCategoryModal.tsx         ──► Modal for adding a new category from categories

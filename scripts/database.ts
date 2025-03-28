@@ -115,7 +115,7 @@ export const addCategory = async (emoji: string, name: string) => {
     console.log(`✅ Category added: ${name} (${emoji})`);
 
     const checkResult = await db.execAsync('SELECT * FROM categories');
-    console.log('🧐 Categories after insert:', JSON.stringify(checkResult, null, 2));
+    console.log('🧐 Index after insert:', JSON.stringify(checkResult, null, 2));
   } catch (error) {
     console.error('❌ Error adding category:', error);
   }

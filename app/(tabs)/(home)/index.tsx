@@ -39,7 +39,7 @@ const cosmoteLogo = require('@/assets/images/cosmote.png');
 const deiLogo = require('@/assets/images/dei.png');
 const deyapLogo = require('@/assets/images/eydap1.png');
 
-const BillingInfoScreen: React.FC = () => {
+export default function BillingInfoScreen() {
     const [billingInfo, setBillingInfo] = useState<BillingData[]>([]);
     const [expandedMonths, setExpandedMonths] = useState<Record<number, boolean>>({});
     const [ currentMonthExpenses, setCurrentMonthExpenses] = useState<number>(0);
@@ -422,7 +422,3 @@ const BillingInfoScreen: React.FC = () => {
         </ScrollView>
     );
 };
-
-
-
-export default BillingInfoScreen;

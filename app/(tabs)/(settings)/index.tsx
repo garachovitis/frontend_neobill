@@ -4,7 +4,7 @@ import NewAccount from '@/app/modals/newAccountModal';
 import styles from '@/app/styles/settingsStyles';
 import DeleteConfirmationModal from '@/app/modals/deleteDataModal';
 
-const Settings = () => {
+export default function SettingsScreen() {
   const xButton = require('@/assets/images/xButton.png');
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -96,6 +96,3 @@ const Settings = () => {
     </View>
   );
 };
-
-
-export default Settings;

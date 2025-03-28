@@ -28,7 +28,7 @@ const cleanAmount = (amount: number | string): number => {
     return parseFloat(amount.toString().replace(/[^0-9.-]+/g, "")) || 0;
 };
 
-const Categories = () => {
+export default function CategoriesScreen() {
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [billingInfo, setBillingInfo] = useState<BillingData[]>([]);
@@ -172,5 +172,3 @@ const Categories = () => {
         </View>
     );
 };
-
-export default Categories;

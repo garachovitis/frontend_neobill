@@ -4,7 +4,7 @@ import { Calendar } from 'react-native-calendars';
 
 const { width } = Dimensions.get('window');
 
-export default function App() {
+export default function CalendarScreen() {
   const onDayPress = (day: { dateString: string; day: number; month: number; year: number }) => {
     console.log('Selected day:', day);
   };
