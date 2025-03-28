@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, Alert, Modal, FlatList, RefreshControl } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import { getBillingInfo, getCategories, updateBillingInfo, updateBillingCategoryLocal } from '@/scripts/database';
+import { getBillingInfo, getCategories, updateBillingInfo, updateBillingCategoryLocal } from '@/scripts/database.old';
 import { useFocusEffect } from '@react-navigation/native';
 import styles from '@/app/styles/indexStyles';
 import CategorySelectionModal from '@/app/modals/categorySelectionModal'; 

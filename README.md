@@ -51,5 +51,5 @@ app
 
 
 ├── scripts
-    ├── database.ts           ──► connects with locadb
+    ├── database.old.ts           ──► connects with locadb
     ├── autoScrape.ts         ──► autoscrapes on background to backend

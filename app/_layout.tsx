@@ -1,12 +1,12 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { setupDatabase } from '@/scripts/database';
-import {database} from "@/scripts/database.new";
+import { setupDatabase } from '@/scripts/database.old';
+import {database} from "@/scripts/database";
 
-setupDatabase();
+// setupDatabase();
 
-const test = database.get('Categories');
+const test = database.get('categories');
 console.log(test);
 
 export default function RootLayout() {

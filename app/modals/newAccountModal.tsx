@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import axios from 'axios';
 import { ProgressBar } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
-import { addBillingInfo } from '@/scripts/database';
+import { addBillingInfo } from '@/scripts/database.old';
 import { Keyboard } from 'react-native';
 import TermsModal from '@/app/modals/terms&conditionsModal';
 import styles from '@/app/styles/newaccStyles';

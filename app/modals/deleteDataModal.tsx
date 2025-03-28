@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { deleteAllData } from '@/scripts/database';
+import { deleteAllData } from '@/scripts/database.old';
 
 interface DeleteConfirmationModalProps {
   isVisible: boolean;
