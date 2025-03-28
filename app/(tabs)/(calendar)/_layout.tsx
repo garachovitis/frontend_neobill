@@ -1,9 +1,9 @@
-import {Stack, Tabs} from "expo-router";
+import {Stack} from "expo-router";
 
 export default function CalendarLayout() {
     return (
-        <Tabs>
-            <Tabs.Screen name="index" />
-        </Tabs>
+        <Stack>
+            <Stack.Screen options={{ title: "Gamo tin expo" }} name="index" />
+        </Stack>
     );
 }
