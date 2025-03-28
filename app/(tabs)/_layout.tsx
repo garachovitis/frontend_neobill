@@ -2,8 +2,6 @@ import React from 'react';
 import { Image, Pressable, Platform } from 'react-native';
 import { Tabs, router } from 'expo-router';
 import { NavigationContainer } from '@react-navigation/native';
-import {useColorScheme} from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
 // Images must be imported through require()
 const HomeIcon = require('@/assets/images/Home.png');
@@ -18,7 +16,6 @@ function TabBarIcon({ source, color }: { source: any; color?: string }) {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <NavigationContainer>
@@ -34,7 +31,6 @@ export default function TabLayout() {
             marginTop: 10,
             fontSize: 14,
           },
-          headerShown: useClientOnlyValue(false, true),
           headerTitleAlign: 'center',
           headerTitleStyle: { fontSize: 20 },
           headerStyle: {
